@@ -1,0 +1,38 @@
+:root { --sqr-size: 80vh; --sqr-margin: 20%; }
+* { margin: 0; padding: 0; user-select: none; -webkit-user-drag: none; }
+
+.gameview { position: absolute; height: var(--sqr-size); }
+.hide { opacity: 0; pointer-events: none; }
+.show { opacity: 1; }
+
+#logo-container
+{
+    position: relative;
+    height: var(--sqr-size);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#top
+{
+    position: absolute;
+    transition-duration: 0.5s;
+    height: calc(var(--sqr-size) - var(--sqr-margin));
+}
+
+#button:hover { cursor: pointer; }
+#button
+{
+    height: 30px;
+    width: 110px;
+    border-style: none;
+    border-radius: 5px;
+
+    display: block;
+    margin: 10px auto;
+
+    color: white;
+    background-color: blueviolet;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
