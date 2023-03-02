@@ -10,11 +10,11 @@ class PunchGame
         this.angle = angle;
         this.angleTarget = angle;
 
-        this.position = [container.clientWidth * position[0], container.clientHeight * position[1]];
+        this.position = [fitter.clientWidth * position[0], fitter.clientHeight * position[1]];
         this.positionTarget = this.position;
 
-        this.width = this.characterSize[0] * (container.clientWidth / scale);
-        this.height = this.characterSize[1] * (container.clientWidth / scale);
+        this.width = this.characterSize[0] * (fitter.clientWidth / scale);
+        this.height = this.characterSize[1] * (fitter.clientWidth / scale);
 
         this.IsClicked = false;
     }
@@ -32,6 +32,7 @@ class PunchGame
 
         await waitTime(0.15);
         this.positionTarget[1] -= this.height;
+        shake();
         
         await waitTime(0.15);
         this.IsClicked = false;

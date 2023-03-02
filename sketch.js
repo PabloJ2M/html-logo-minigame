@@ -6,7 +6,8 @@ let listOfGames = [];
 let listOfEnemy = [];
 let score = new Score();
 
-let container = document.getElementById("background");
+let container = document.getElementById("minigame");
+let fitter = document.getElementById("background");
 let gameWidth;
 let gameHeight;
 
@@ -20,8 +21,8 @@ async function preload()
 }
 async function setup()
 {
-    gameWidth = container.clientWidth;
-    gameHeight = container.clientHeight;
+    gameWidth = fitter.clientWidth;
+    gameHeight = fitter.clientHeight;
     var canvas = createCanvas(gameWidth, gameHeight);
     canvas.parent("minigame");
 
@@ -56,6 +57,13 @@ function mouseClicked()
     if (!gameEnable || !animation) return;
     listOfEnemy[gameIndex]?.input(listOfGames[gameIndex], score);
     listOfGames[gameIndex]?.input();
+}
+
+async function shake()
+{
+    container.classList.add("shake");
+    await waitTime(0.1);
+    container.classList.remove("shake");
 }
 
 function inverseTransform(x, y, rotation) { rotate(-rotation); transform(-x, -y); }
