@@ -1,29 +1,25 @@
-let gameIndex = 0;
-let gameEnable = false;
-let animation = false, waiting = false;
-
-let listOfGames = [];
-let listOfEnemy = [];
 let score = new Score();
+let animation = false, waiting = false;
+let gameIndex = Random(listOfGames.length);
 
-let container = document.getElementById("minigame");
-let fitter = document.getElementById("background");
-let gameWidth;
-let gameHeight;
+//#region --------------- Events ---------------
+let game = listOfGames[gameIndex];
+listOfGames = null;
 
-async function preload()
-{
-    await waitTime(0.01);
-    
-    listOfGames[gameIndex].preload();
-    listOfEnemy[gameIndex].preload();
-    console.log("preloading games images");
-}
+addEventListener("Awake", () => game.preload());
+addEventListener("Start", () => game.setup());
+addEventListener("Input", () => game.input());
+
+addEventListener("Enable", () => game.start());
+addEventListener("Update", () => game.update());
+addEventListener("Update", () => score.update());
+
+//#region ----------------- P5 -----------------
+function preload() { dispatchEvent(onAwake); }
+
 async function setup()
 {
-    gameWidth = fitter.clientWidth;
-    gameHeight = fitter.clientHeight;
-    var canvas = createCanvas(gameWidth, gameHeight);
+    var canvas = createCanvas(fitter.clientWidth, fitter.clientHeight);
     canvas.parent("minigame");
 
     angleMode(DEGREES);
@@ -31,8 +27,7 @@ async function setup()
     pixelDensity(1);
 
     await until(() => gameEnable);
-    listOfGames[gameIndex].setup();
-    listOfEnemy[gameIndex].setup(score);
+    dispatchEvent(onStart);
 }
 async function draw()
 {
@@ -43,28 +38,18 @@ async function draw()
     {
         waiting = true;
         await waitTime(0.5);
-        listOfGames[gameIndex].animation();
+        dispatchEvent(onEnable);
         animation = true; waiting = false;
     }
 
-    listOfEnemy[gameIndex].update();
-    listOfGames[gameIndex].update();
-    score.update();
+    dispatchEvent(onUpdate);
 }
 
-function mouseClicked()
-{
-    if (!gameEnable || !animation) return;
-    listOfEnemy[gameIndex]?.input(listOfGames[gameIndex], score);
-    listOfGames[gameIndex]?.input();
-}
+//#region ------------- Extensions -------------
 
-async function shake()
-{
-    container.classList.add("shake");
-    await waitTime(0.1);
-    container.classList.remove("shake");
-}
+//input
+function mouseClicked() { if (gameEnable && animation) dispatchEvent(onInput); }
 
-function inverseTransform(x, y, rotation) { rotate(-rotation); transform(-x, -y); }
-function transform(x, y, rotation) { translate(x, y); rotate(rotation); }
+//movement
+function transform(position, rotation) { translate(position.x, position.y); rotate(rotation); }
+function inverseTransform(position, rotation) { rotate(-rotation); translate(-position.x, -position.y); }

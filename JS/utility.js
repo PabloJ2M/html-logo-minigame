@@ -9,3 +9,10 @@ const Lerp = (a, b, t) => a -= (a - b) * t;
 const Clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 const Random = (maxValue) => Math.floor(Math.random() * maxValue);
 const Abs = (num) => Math.abs(num);
+
+const ClampAngle = (num, fn) => 
+{
+    if (num > 360) { num -= 360; fn(); }
+    else if (num < 0) { fn(); num += 360; }
+    return num;
+}
