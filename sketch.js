@@ -51,5 +51,5 @@ async function draw()
 function mouseClicked() { if (gameEnable && animation) dispatchEvent(onInput); }
 
 //movement
-function transform(position, rotation) { translate(position.x, position.y); rotate(rotation); }
-function inverseTransform(position, rotation) { rotate(-rotation); translate(-position.x, -position.y); }
+function transform(position, rotation) { translate(world.x + position.x, world.y + position.y); rotate(rotation); }
+function inverseTransform(position, rotation) { rotate(-rotation); translate(-world.x - position.x, -world.y - position.y); }

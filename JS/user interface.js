@@ -2,9 +2,9 @@ class Score
 {
     constructor()
     {
-        this.step = 50;
-        this.score = 0;
         this.time = 0;
+        this.score = 0;
+        this.step = 50;
     }
 
     update()

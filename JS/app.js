@@ -16,14 +16,16 @@ function selectRandomGame()
 
 //#region ----------------- Gameplay -----------------
 
+let world = { x: fitter.clientWidth * 0.5, y: fitter.clientHeight * 0.5 };
 let listOfGames = [];
+
 let gameEnable = false;
 let progress = 0;
 
-const onInput = new Event("Input");
 const onAwake = new Event("Awake");
-const onEnable = new Event("Enable");
 const onStart = new Event("Start");
+const onInput = new Event("Input");
+const onEnable = new Event("Enable");
 const onUpdate = new Event("Update");
 
 async function shakeEffect()

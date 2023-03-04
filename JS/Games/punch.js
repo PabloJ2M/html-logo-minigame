@@ -8,33 +8,32 @@ class PunchGame extends GameTemplate
         this.pivot = 0, this.speed = 0;
         this.IsClicked = false;
 
-        this.enemy = new SimpleEnemy({ x: 0.5, y: 1 }, 0, 0.7, [2, 1, 0.5, 0.3]);
-        this.hidePosition = 0, this.hideTarget = 0;
+        this.enemy = new SimpleEnemy({ x: 0, y: 0.5 }, 0, 0.7, [2, 1, 0.5, 0.3]);
+        this.hidePosition = 0, this.hideTarget = 0, this.hideThreshold = 0;
         this.IsEnemy = false;
     }
 
     preload()
     {
-        this.player.size = { w: 383, h: 469 };
-        this.enemy.size = { w: 100, h: 100 };
-
-        this.player.image = loadImage('../Assets/punch/hand.png');
+        this.enemy.pixels = { w: 100, h: 100 };
+        this.player.pixels = { w: 383, h: 446 };
+        this.player.image = loadImage('../../Assets/punch/hand.png');
     }
     async start()
     {
+        //draw player at beginning
+        this.player.drawEntity(() => this.drawImage(this.player));
+
         //player settings
-        this.player.target = { x: fitter.clientWidth * 0.5, y: fitter.clientHeight * 0.5 - this.player.height };
+        this.player.target = { x: 0, y: -this.player.rect.h };
         this.pivot = this.player.target.y;
         this.player.targetAngle = 0;
 
         //enemy settings
         this.enemy.setImgSize();
-        this.enemy.position.y += this.enemy.height;
-        this.enemy.target.y = (fitter.clientHeight * 0.5) + (this.enemy.height * 0.5);
-
-        //draw player at begining
-        this.drawEntity(this.player);
-
+        this.enemy.target.y = this.enemy.rect.h * 0.5;
+        this.hideThreshold = -this.enemy.rect.w * 0.5; //only for shapes not images
+        
         //couroutine
         await until(() => Abs(this.enemy.position.y - this.enemy.target.y) < 0.01);
         while (gameEnable) {
@@ -44,7 +43,7 @@ class PunchGame extends GameTemplate
 
             //set speed by dificulty
             var index = Clamp(progress, 0, this.enemy.dificulty.length - 1);
-            this.hideTarget = -this.enemy.height;
+            this.hideTarget = -this.enemy.rect.h;
             await waitTime(this.enemy.dificulty[index]);
 
             //hide current enemy
@@ -54,39 +53,35 @@ class PunchGame extends GameTemplate
     }
     update()
     {
-        //calculate player position
+        //calculate player position & draw player
         this.transition();
-
-        //draw player
-        this.drawEntity(this.player);
+        this.player.drawEntity(() => this.drawImage(this.player));
 
         //draw enemy
-        var xThreshold = -this.enemy.width * 0.5;
-        transform(this.enemy.position, 0);
-
-        //inner enemy movement
-        this.hidePosition = Lerp(this.hidePosition, this.hideTarget, this.speed * deltatime * 10);
-        
-        //inner enemy
-        fill(this.IsEnemy ? color(255, 0, 0) : color(0, 255, 0));
-        square(xThreshold, this.hidePosition, this.enemy.width, 20, 20, 0, 0);
-
-        //hide base enemy
-        fill(color(255, 255, 255));
-        rect(xThreshold, 0, this.enemy.width, this.enemy.height);
-        inverseTransform(this.enemy.position, 0);
-
         this.enemy.translate(this.speed);
+        this.enemy.drawEntity(() => 
+        {
+            //inner enemy movement
+            this.hidePosition = Lerp(this.hidePosition, this.hideTarget, this.speed * deltatime * 10);
+
+            //inner enemy
+            fill(this.IsEnemy ? color(255, 0, 0) : color(0, 255, 0));
+            square(this.hideThreshold, this.hidePosition, this.enemy.rect.w, 20, 20, 0, 0);
+
+            //hide base enemy
+            fill(color(255, 255, 255));
+            rect(this.hideThreshold, 0, this.enemy.rect.w, this.enemy.rect.h);
+        });
     }
     async input()
     {
         if (this.IsClicked) return;
 
-        this.player.target.y += this.player.height;
+        this.player.target.y += this.player.rect.h;
         this.IsClicked = true;
 
         //hide showed enemy
-        if (Abs(this.hidePosition) > this.enemy.height * 0.25)
+        if (Abs(this.hidePosition) > this.enemy.rect.h * 0.25)
         {
             this.hideTarget = 0;
             if (this.IsEnemy) score.addScore(100); else score.addScore(-50);
@@ -100,6 +95,3 @@ class PunchGame extends GameTemplate
         this.IsClicked = false;
     }
 }
-
-//adding gameplay to list
-listOfGames.push(new PunchGame({ x: 0.475, y: 0.275 }, 48, 2.7));

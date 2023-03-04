@@ -17,18 +17,26 @@
 
     <button id="button">Play</button>
 
-    <!-- Library -->
+    <!-- App Library -->
     <script src="Library/p5.min.js"></script>
 
     <!-- Application -->
     <script src="JS/utility.js"></script>
     <script src="JS/app.js"></script>
     
-    <!-- Games -->
-    <script src="JS/Games/template.js"></script>
+    <!-- Games Logic -->
+    <script src="JS/Games/Extensions/template.js"></script>
+    <script src="JS/Games/Extensions/mechanics.js"></script>
+
+    <!-- Add Games to List -->
     <script src="JS/Games/asteroid.js"></script>
     <script src="JS/Games/dinosour.js"></script>
     <script src="JS/Games/punch.js"></script>
+
+    <script>
+        listOfGames.push(new PunchGame({ x: -0.021, y: -0.227 }, 48, 2.7));
+        listOfGames.push(new Asteroid({ x: 0.26, y: 0.11 }, 125, 2.75));
+    </script>
     
     <script src="JS/user interface.js"></script>
     <script src="sketch.js"></script>

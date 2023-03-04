@@ -16,3 +16,20 @@ const ClampAngle = (num, fn) =>
     else if (num < 0) { fn(); num += 360; }
     return num;
 }
+const Direction = (angle) =>
+{
+    let t = angle * Math.PI / 180;
+    let x = Math.sin(t);
+    let y = Math.cos(t);
+    return { x: x, y: y };
+}
+
+//Collision
+const CircleCast = (position, r1, target, r2) =>
+{
+    var rad = r1 + r2;
+    var x = position.x - target.x;
+    var y = position.y - target.y;
+    
+    return (rad > Math.sqrt((x * x) + (y * y)));
+}
