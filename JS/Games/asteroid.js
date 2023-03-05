@@ -5,6 +5,7 @@ class Asteroid extends GameTemplate
     {
         super(position, angle, scale);
         this.pivot = { x: 0, y: 0 };
+        this.right = true;
 
         this.shoots = new Pulling();
         this.obstacles = new Pulling();
@@ -43,7 +44,7 @@ class Asteroid extends GameTemplate
 
         //draw player
         this.player.drawEntity(() => this.drawImage(this.player));
-        this.player.targetAngle += 2;
+        this.player.targetAngle += this.right ? 2 : -2;
         
         //draw bullets
         this.shoots.items.forEach(bullet =>
@@ -108,5 +109,7 @@ class Asteroid extends GameTemplate
 
         //spawn bullet
         this.shoots.instance({ x: dir.x, y: -dir.y }, this.player.angle, 0.5);
+
+        this.right = !this.right;
     }
 }
