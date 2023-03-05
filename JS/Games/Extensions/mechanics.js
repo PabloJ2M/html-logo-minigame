@@ -4,15 +4,19 @@ class PulledObject extends TObject
     {
         super(position, angle);
         this.enable = false;
-        this.target = 0;
+        this.time = 0;
     }
 
-    reset(position, angle, target)
+    reset(position, angle)
     {
         this.position = position;
         this.angle = angle;
         this.enable = false;
-        this.target = target;
+    }
+    async destroy()
+    {
+        await until(() => this.time <= 0);
+        this.enable = false;
     }
 }
 
@@ -20,33 +24,30 @@ class Pulling
 {
     constructor() { this.items = []; }
 
-    instance(position, angle, target, time)
+    instance(position, angle, time)
     {
         var item = null;
 
-        //find disable item
+        //find disabled item
         for(let i = 0; i < this.items.length; i++)
         { if (!this.items[i].enable) { item = this.items[i]; break; } }
 
-        if (this.items.length != 0 && item != null) item.reset(position, angle, target); 
+        //spawn new or use existing
+        if (this.items.length != 0 && item != null) item.reset(position, angle);
         else { item = new PulledObject(position, angle); this.items.push(item); }
-        this.destroy(item, time);
-        item.enable = true;
-    }
 
-    async destroy(item, time)
-    {
+        //setup
+        item.enable = true;
         if (time == null) return;
-        await waitTime(time);
-        item.enable = false;
+        item.time = time;
+        item.destroy();
     }
 }
 
 class SimpleEnemy extends GameObject
 {
-    constructor(position, angle, scale, dificulty)
+    constructor(position, angle, scale)
     {
         super(position, angle, scale);
-        this.dificulty = dificulty;
     }
 }

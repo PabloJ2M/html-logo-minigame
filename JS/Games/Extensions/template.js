@@ -1,6 +1,7 @@
 class GameTemplate
 {
     maxSpeed = 0;
+    dificulty = [0];
 
     constructor(position, angle, scale)
     {

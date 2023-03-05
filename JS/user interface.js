@@ -11,6 +11,7 @@ class Score
     {
         textSize(32);
         textAlign(LEFT);
+        fill(color(255));
         text('score: ' + this.score.toString(), 10, 32);
 
         textAlign(RIGHT);

@@ -8,16 +8,17 @@ class PunchGame extends GameTemplate
         this.pivot = 0, this.speed = 0;
         this.IsClicked = false;
 
-        this.enemy = new SimpleEnemy({ x: 0, y: 0.5 }, 0, 0.7, [2, 1, 0.5, 0.3]);
+        this.enemy = new SimpleEnemy({ x: 0, y: 0.5 }, 0, 0.7);
         this.hidePosition = 0, this.hideTarget = 0, this.hideThreshold = 0;
         this.IsEnemy = false;
     }
 
     preload()
     {
-        this.enemy.pixels = { w: 100, h: 100 };
-        this.player.pixels = { w: 383, h: 446 };
         this.player.image = loadImage('../../Assets/punch/hand.png');
+        this.player.pixels = { w: 383, h: 446 };
+        this.enemy.pixels = { w: 100, h: 100 };
+        this.dificulty = [2, 1, 0.5, 0.3];
     }
     async start()
     {
@@ -37,14 +38,16 @@ class PunchGame extends GameTemplate
         //couroutine
         await until(() => Abs(this.enemy.position.y - this.enemy.target.y) < 0.01);
         while (gameEnable) {
+            await until(() => isLooping());
+            
             //select enemy random
             this.IsEnemy = Random(2) != 0 ? true : false;
             await waitTime(Random(3) + 1);
 
             //set speed by dificulty
-            var index = Clamp(progress, 0, this.enemy.dificulty.length - 1);
+            var index = Clamp(progress, 0, this.dificulty.length - 1);
             this.hideTarget = -this.enemy.rect.h;
-            await waitTime(this.enemy.dificulty[index]);
+            await waitTime(this.dificulty[index]);
 
             //hide current enemy
             this.hideTarget = 0;
@@ -69,7 +72,7 @@ class PunchGame extends GameTemplate
             square(this.hideThreshold, this.hidePosition, this.enemy.rect.w, 20, 20, 0, 0);
 
             //hide base enemy
-            fill(color(255, 255, 255));
+            fill(color(255));
             rect(this.hideThreshold, 0, this.enemy.rect.w, this.enemy.rect.h);
         });
     }

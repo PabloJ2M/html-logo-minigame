@@ -47,6 +47,9 @@ async function draw()
 
 //#region ------------- Extensions -------------
 
+addEventListener("blur", () => noLoop());
+addEventListener("focus", () => loop());
+
 //input
 function mouseClicked() { if (gameEnable && animation) dispatchEvent(onInput); }
 
