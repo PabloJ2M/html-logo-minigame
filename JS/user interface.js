@@ -10,8 +10,9 @@ class Score
     update()
     {
         textSize(32);
-        textAlign(LEFT);
         fill(color(255));
+
+        textAlign(LEFT);
         text('score: ' + this.score.toString(), 10, 32);
 
         textAlign(RIGHT);

@@ -33,3 +33,17 @@ const CircleCast = (position, r1, target, r2) =>
     
     return (rad > Math.sqrt((x * x) + (y * y)));
 }
+const BoxCast = (position, square, size, margen) =>
+{
+    var width = (size.x * 0.5) + margen;
+    var hor = position.x >= square.x - width && position.x <= square.x + width;
+    
+    var height = (size.y * 0.5) + margen;
+    var ver = position.y >= square.y - height && position.y <= square.y + height;
+    
+    return hor && ver;
+}
+const TriCast = (position, rect, triangle) =>
+{
+
+}

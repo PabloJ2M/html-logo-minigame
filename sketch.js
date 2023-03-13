@@ -50,6 +50,14 @@ async function draw()
 addEventListener("blur", () => noLoop());
 addEventListener("focus", () => loop());
 
+const getProgress = (max) => Clamp(progress, 0, max - 1);
+const gameOver = () =>
+{
+    gameEnable = false;
+    window.alert("Game Over");
+    location.reload();
+}
+
 //input
 function mouseClicked() { if (gameEnable && animation) dispatchEvent(onInput); }
 

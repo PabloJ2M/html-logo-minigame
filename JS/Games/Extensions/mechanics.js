@@ -17,6 +17,7 @@ class PulledObject extends TObject
     {
         await until(() => this.time <= 0);
         this.enable = false;
+        console.log("destroy");
     }
 }
 
@@ -35,6 +36,7 @@ class Pulling
         //spawn new or use existing
         if (this.items.length != 0 && item != null) item.reset(position, angle);
         else { item = new PulledObject(position, angle); this.items.push(item); }
+        console.log("spawn");
 
         //setup
         item.enable = true;

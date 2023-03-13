@@ -95,6 +95,7 @@ class Asteroid extends GameTemplate
                 if (CircleCast(obstacle.position, 40, { x: 0, y: 0 }, 15))
                 {
                     obstacle.destroy();
+                    gameOver();
                 }
             }
         });

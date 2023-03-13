@@ -87,10 +87,12 @@ class PunchGame extends GameTemplate
         if (Abs(this.hidePosition) > this.enemy.rect.h * 0.25)
         {
             this.hideTarget = 0;
-            if (this.IsEnemy) score.addScore(100); else score.addScore(-50);
+            if (this.IsEnemy) score.addScore(100);
         }
 
         await waitTime(0.2);
+        if (Abs(this.hidePosition) > 1 && !this.IsEnemy) gameOver();
+
         this.player.target.y = this.pivot;
         shakeEffect();
 
